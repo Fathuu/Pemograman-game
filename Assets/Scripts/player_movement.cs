@@ -5,13 +5,16 @@ using UnityEngine;
 public class player_movement : MonoBehaviour
 {
     //Variabel
-    private float kecepatan = 7f;
+    [SerializeField] public float kecepatan;
     public float x;
     public float z;
+    [SerializeField] private float Speed_jump = 3f;
+    [SerializeField] private float Speed_walk = 4f;
+    [SerializeField] private float Speed_Run = 7f;
 
     [SerializeField] private float gravitasi = -9.81f;
     [SerializeField] private Transform groundCheck;
-    [SerializeField] private float groundDistance = -0.4f;
+    [SerializeField] private float groundDistance = 0.4f;
     [SerializeField] private LayerMask groundMask;
     public bool isGrounded;
     Vector3 velocity;
@@ -30,6 +33,8 @@ public class player_movement : MonoBehaviour
     {
         grafity();
         Bergerak();
+        Lompat();
+        Jalan();
     }
 
     private void Bergerak()
@@ -49,7 +54,31 @@ public class player_movement : MonoBehaviour
             velocity.y = -2f;
         }
 
+
+    }
+
+    private void Lompat()
+    {
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            velocity.y = Mathf.Sqrt(Speed_jump * -2f * gravitasi);
+        }
+
         velocity.y += gravitasi * Time.deltaTime;
         Controller.Move(velocity * Time.deltaTime);
+
     }
+
+    private void Jalan()
+    {
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            kecepatan = Speed_walk;
+        }
+        else
+        {
+            kecepatan = Speed_Run;
+        }
+    }
+
 }
