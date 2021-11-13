@@ -7,6 +7,8 @@ public class HUDmanager : MonoBehaviour
 {
     public Image currentEnergy;
     public Text time;
+    [SerializeField] GameObject PauseMenu;
+    public static bool GameIsPaused = false;
 
     private GameObject player;
 
@@ -34,6 +36,7 @@ public class HUDmanager : MonoBehaviour
         EnergyDrain();
         updateEnergy();
         updatetime();
+        ShowPause();
     }
 
     private void EnergyDrain()
@@ -91,5 +94,36 @@ public class HUDmanager : MonoBehaviour
         }
 
         time.text = gamehours + " : " + gameminutes;
+    }
+
+    private void ShowPause()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (GameIsPaused)
+            {
+                Resume();
+            }
+            else
+            {
+                pause();
+            }
+        }
+    }
+
+    public void Resume()
+    {
+        PauseMenu.SetActive(false);
+        GameIsPaused = false;
+        Time.timeScale = 1f;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    void pause()
+    {
+        PauseMenu.SetActive(true);
+        GameIsPaused = true;
+        Time.timeScale = 0f;
+        Cursor.lockState = CursorLockMode.Confined;
     }
 }
