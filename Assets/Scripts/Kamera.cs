@@ -6,21 +6,30 @@ public class Kamera : MonoBehaviour
 {
     //Variabel
     [SerializeField] private float sensivity;
+    [SerializeField] private float mouseX, mouseY;
 
     //Referansi
-    private Transform parent;
+    public Transform Player, target;
 
     // Start is called before the first frame update
     void Start()
     {
-        parent = transform.parent;
         Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
     void Update()
     {
-        float mouseX = Input.GetAxis("Mouse X") * sensivity * Time.deltaTime;
-        parent.Rotate(Vector3.up,mouseX);
+        if (!HUDmanager.GameIsPaused)
+        {
+            mouseX += Input.GetAxis("Mouse X") * sensivity;
+            mouseY -= Input.GetAxis("Mouse Y") * sensivity;
+
+            mouseY = Mathf.Clamp(mouseY, -35, 60);
+            transform.LookAt(target);
+
+            target.rotation = Quaternion.Euler(mouseY, mouseX, 0);
+            Player.rotation = Quaternion.Euler(0, mouseX, 0);
+        }
     }
 }

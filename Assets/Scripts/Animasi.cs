@@ -5,9 +5,10 @@ using UnityEngine;
 public class Animasi : MonoBehaviour
 {
     //variabel
-    private float nilai_x;
-    private float nilai_z;
+    [SerializeField] private float nilai_x;
+    [SerializeField] private float nilai_z;
     private bool status_ground;
+    public float kecepatan_pemain;
 
     //referensi
     private Animator anim;
@@ -25,7 +26,16 @@ public class Animasi : MonoBehaviour
     {
         nilai_x = player.GetComponent<player_movement>().x;
         nilai_z = player.GetComponent<player_movement>().z;
-        status_ground = player.GetComponent<player_movement>().isGrounded;
+        kecepatan_pemain = player.GetComponent<player_movement>().kecepatan;
+        //status_ground = player.GetComponent<player_movement>().isGrounded;
+        if (Input.GetButtonDown("Jump"))
+        {
+            status_ground = true;
+        }
+        else
+        {
+            status_ground = false;
+        }
         anim.SetFloat("x", nilai_x);
         anim.SetFloat("z", nilai_z);
         anim.SetBool("isGrounded", status_ground);

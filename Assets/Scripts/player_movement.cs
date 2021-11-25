@@ -8,11 +8,10 @@ public class player_movement : MonoBehaviour
     [SerializeField] public float kecepatan;
     public float x;
     public float z;
-    [SerializeField] private float Speed_jump = 3f;
-    [SerializeField] private float Speed_walk = 4f;
-    [SerializeField] private float Speed_Run = 7f;
-
-    [SerializeField] private float gravitasi = -9.81f;
+    [SerializeField] private float Speed_jump = 2f;
+    [SerializeField] private float Speed_walk = 2f;
+    [SerializeField] public float Speed_Run = 7f;
+    [SerializeField] private float gravitasi = -20f;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundDistance = 0.4f;
     [SerializeField] private LayerMask groundMask;
@@ -48,13 +47,12 @@ public class player_movement : MonoBehaviour
     private void grafity()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-
         if (isGrounded && velocity.y < 0)
         {
             velocity.y = -2f;
         }
-
-
+        velocity.y += gravitasi * Time.deltaTime;
+        Controller.Move(velocity * Time.deltaTime);
     }
 
     private void Lompat()
@@ -73,11 +71,11 @@ public class player_movement : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            kecepatan = Speed_walk;
+            kecepatan = Speed_Run;
         }
         else
         {
-            kecepatan = Speed_Run;
+            kecepatan = Speed_walk;
         }
     }
 

@@ -9,6 +9,7 @@ public class HUDmanager : MonoBehaviour
     public Text time;
     [SerializeField] GameObject PauseMenu;
     public static bool GameIsPaused = false;
+    public Player playerInstance;
 
     private GameObject player;
 
@@ -18,6 +19,11 @@ public class HUDmanager : MonoBehaviour
     private float kecepatanLari;
     private float input_x;
     private float input_z;
+
+    //HUD DARAH
+    private float darah;
+    private float maxdarah = 100f;
+    public Image currentDarah;
 
     // Start is called before the first frame update
     void Start()
@@ -32,20 +38,23 @@ public class HUDmanager : MonoBehaviour
         kecepatan = player.GetComponent<player_movement>().kecepatan;
         input_x = player.GetComponent<player_movement>().x;
         input_z = player.GetComponent<player_movement>().z;
+        darah = player.GetComponent<system_Darah>().darah_player;
 
         EnergyDrain();
         updateEnergy();
         updatetime();
         ShowPause();
+        Updatedarah();
+
     }
 
     private void EnergyDrain()
     {
         if (kecepatan == kecepatanLari)
         {
-            if(input_x > 0 || input_z > 0)
+            if (input_x > 0 || input_z > 0)
             {
-                if(energy > 0)
+                if (energy > 0)
                 {
                     energy -= 10 * Time.deltaTime;
                 }
@@ -53,12 +62,11 @@ public class HUDmanager : MonoBehaviour
         }
         else
         {
-            if(energy < maxenergy)
+            if (energy < maxenergy)
             {
                 energy += 15 * Time.deltaTime;
             }
         }
-
     }
 
     private void updateEnergy()
@@ -125,5 +133,16 @@ public class HUDmanager : MonoBehaviour
         GameIsPaused = true;
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.Confined;
+    }
+
+    public void Save()
+    {
+        SaveSystem.SavePlayer(playerInstance);
+    }
+
+    private void Updatedarah()
+    {
+        float ratio = darah / maxdarah;
+        currentDarah.rectTransform.localScale = new Vector3(ratio, 1, 1);
     }
 }
