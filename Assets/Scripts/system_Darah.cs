@@ -5,6 +5,7 @@ using UnityEngine;
 public class system_Darah : MonoBehaviour
 {
     public float darah_player;
+    public string info;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +32,13 @@ public class system_Darah : MonoBehaviour
         {
             darah_player -= 30f;
             Debug.Log("Darah =" + darah_player);
+            info = "You was trying to eat an poisonous mushroom";
+        }
+
+        if (other.tag == "Enemy")
+        {
+            darah_player -= 10f;
+            info = "You was killed by a monster";
         }
     }
 }

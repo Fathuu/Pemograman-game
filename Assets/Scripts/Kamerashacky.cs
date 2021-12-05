@@ -5,7 +5,7 @@ using UnityEngine;
 public class Kamerashacky : MonoBehaviour
 {
     [SerializeField] private float power = 0.05f;
-    [SerializeField] private float duration = 1f;
+    [SerializeField] private float duration = 0f;
     private float slowDownAmount = 1f;
     private bool shouldShake = false;
     public Transform kamera;
@@ -25,12 +25,10 @@ public class Kamerashacky : MonoBehaviour
     {
         if (shouldShake)
         {
-            if (duration > 0)
-            {
-                kamera.localPosition = startPosition + Random.insideUnitSphere * power;
-                duration = Time.deltaTime * slowDownAmount;
-            }
-            else
+            kamera.localPosition = startPosition + Random.insideUnitSphere * power;
+            duration += Time.deltaTime * slowDownAmount;
+
+            if (duration > 4)
             {
                 shouldShake = false;
                 duration = initialDuration;
@@ -42,6 +40,11 @@ public class Kamerashacky : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Obstacle")
+        {
+            shouldShake = true;
+        }
+
+        if (other.tag == "Enemy")
         {
             shouldShake = true;
         }
